@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="body.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Card</title>
+</head>
+
+<body>
+    <button class="secret-button" aria-label="Secret button">✦</button>
+    <audio id="birthday-audio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-toggle" aria-label="Play birthday song">� Celebrate Michelle</button>
+
+    <div class="card">
+        <h1>Happy Birthday, Michelle!</h1>
+        <p>Hey Michelle, today is your day, and I’m so happy to celebrate you.</p>
+        <p>Your laughter, kindness, and beautiful personality make life brighter, and I’m so lucky to have you in my
+            life.</p>
+        <p>May your year be full of joy, wild dreams, sweet memories, and the kind of happiness that makes you smile
+            nonstop.</p>
+        <div class="balloons">
+            🎈🎈🎈
+        </div>
+    </div>
+
+    <script>
+        const card = document.querySelector('.card');
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('span');
+            const size = Math.random() * 10 + 5;
+            const dx = (Math.random() - 0.5) * 140;
+            const dy = -Math.random() * 120 - 20;
+
+            sparkle.className = 'sparkle';
+            sparkle.style.width = `${size}px`;
+            sparkle.style.height = `${size}px`;
+            sparkle.style.left = `${x}px`;
+            sparkle.style.top = `${y}px`;
+            sparkle.style.setProperty('--dx', `${dx}px`);
+            sparkle.style.setProperty('--dy', `${dy}px`);
+
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1800);
+        }
+
+        setInterval(() => {
+            for (let i = 0; i < 3; i++) {
+                createSparkle(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight
+                );
+            }
+        }, 700);
+
+        document.addEventListener('mousemove', (event) => {
+            if (Math.random() < 0.5) {
+                createSparkle(event.clientX, event.clientY);
+            }
+        });
+
+        card.addEventListener('mousemove', (event) => {
+            const rect = card.getBoundingClientRect();
+            const offsetX = (event.clientX - rect.left) / rect.width;
+            const offsetY = (event.clientY - rect.top) / rect.height;
+            const rotateY = (offsetX - 0.5) * 12;
+            const rotateX = (0.5 - offsetY) * 12;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+
+        const audio = document.getElementById('birthday-audio');
+        const musicToggle = document.querySelector('.music-toggle');
+
+        musicToggle.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                musicToggle.textContent = '❚❚ Pause Birthday Vibes';
+                musicToggle.classList.add('playing');
+            } else {
+                audio.pause();
+                musicToggle.textContent = '🎂 Celebrate Michelle';
+                musicToggle.classList.remove('playing');
+            }
+        });
+
+        const secretButton = document.querySelector('.secret-button');
+
+        secretButton.addEventListener('click', () => {
+            const burst = document.createElement('div');
+            burst.className = 'name-burst';
+            burst.textContent = 'Happy Birthday, Michelle!';
+            document.body.appendChild(burst);
+
+            for (let i = 0; i < 22; i++) {
+                const star = document.createElement('span');
+                star.className = 'sparkle';
+                const size = Math.random() * 12 + 8;
+                const angle = (Math.PI * 2 * i) / 22;
+                const radius = 70 + Math.random() * 60;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                const dx = Math.cos(angle) * (60 + Math.random() * 90);
+                const dy = Math.sin(angle) * (60 + Math.random() * 90);
+
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.setProperty('--dx', `${dx}px`);
+                star.style.setProperty('--dy', `${dy}px`);
+                star.style.background = 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,150,205,1) 30%, rgba(141,214,255,1) 60%, rgba(255,255,255,0) 100%)';
+
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 1800);
+            }
+
+            setTimeout(() => burst.remove(), 1800);
+        });
+    </script>
+</body>
+
+</html>
